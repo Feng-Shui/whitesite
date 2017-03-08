@@ -1,0 +1,96 @@
+diff --git a/linkchecker.info b/linkchecker.info
+index eb73aa3..b031679 100644
+--- a/linkchecker.info
++++ b/linkchecker.info
+@@ -1,5 +1,6 @@
+ name = Link checker
+ description = "Periodically checks for broken links in node types, blocks and fields and reports the results."
++package = "Link checker"
+ configure = admin/config/content/linkchecker
+ core = 7.x
+ files[] = linkchecker.drush.inc
+diff --git a/linkchecker.module b/linkchecker.module
+index a3a1a8b..3000b19 100644
+--- a/linkchecker.module
++++ b/linkchecker.module
+@@ -668,6 +668,8 @@ function _linkchecker_status_handling(&$response, $link) {
+           }
+         }
+ 
++        drupal_alter('linkchecker_auto_repair_301_links', $link, $response);
++
+         // CUSTOM BLOCKS: Autorepair all custom blocks having this outdated
+         // link.
+         $result = db_query('SELECT bid FROM {linkchecker_block_custom} WHERE lid = :lid', array(':lid' => $link->lid));
+diff --git a/linkchecker.pages.inc b/linkchecker.pages.inc
+index b533149..a47b057 100644
+--- a/linkchecker.pages.inc
++++ b/linkchecker.pages.inc
+@@ -14,20 +14,31 @@ function linkchecker_admin_report_page() {
+ 
+   // Search for broken links in nodes and comments and blocks of all users.
+   // @todo Try to make UNION'ed subselect resultset smaller.
+-  $subquery4 = db_select('linkchecker_node', 'ln')
+-    ->distinct()
+-    ->fields('ln', array('lid'));
+ 
+-  $subquery3 = db_select('linkchecker_comment', 'lc')
+-    ->distinct()
+-    ->fields('lc', array('lid'));
+-
+-  $subquery2 = db_select('linkchecker_block_custom', 'lb')
+-    ->distinct()
+-    ->fields('lb', array('lid'));
++  // I think we should realize this data thru hooks or get schema by module name, see example below.
++  $default_tables = array(
++    'linkchecker_node',
++    'linkchecker_comment',
++    'linkchecker_block_custom',
++  );
++  // Main hook for related submodules.
++  $tables = module_invoke_all('linkcheker_main_table');
++  $tables  = array_merge($tables, $default_tables);
++
++  foreach ($tables as $table_name) {
++    $subquery = db_select($table_name)
++      ->distinct()
++      ->fields($table_name, array('lid'));
++    if (!isset($union)) {
++      $union = $subquery;
++    }
++    else {
++      $union = $union->union($subquery);
++    }
++  }
+ 
+   // UNION all linkchecker type tables.
+-  $subquery1 = db_select($subquery2->union($subquery3)->union($subquery4), 'q1')->fields('q1', array('lid'));
++  $subquery1 = db_select($union, 'q1')->fields('q1', array('lid'));
+ 
+   // Build pager query.
+   $query = db_select('linkchecker_link', 'll')->extend('PagerDefault')->extend('TableSort');
+@@ -140,12 +151,13 @@ function _linkchecker_report_page($query, $account = NULL) {
+     $nids = _linkchecker_link_node_ids($link, $account);
+     $cids = _linkchecker_link_comment_ids($link, $account);
+     $bids = _linkchecker_link_block_ids($link);
++    $other_ids = module_invoke_all('linkchecker_link_ids', $link);
+ 
+     // If the user does not have access to see this link anywhere, do not
+     // display it, for reasons explained in _linkchecker_link_access(). We
+     // still need to fill the table row, though, so as not to throw off the
+     // number of items in the pager.
+-    if (empty($nids) && empty($cids) && empty($bids)) {
++    if (empty($nids) && empty($cids) && empty($bids) && empty($other_ids)) {
+       $rows[] = array(array('data' => t('Permission restrictions deny you access to this broken link.'), 'colspan' => count($header)));
+       continue;
+     }
+@@ -181,6 +193,9 @@ function _linkchecker_report_page($query, $account = NULL) {
+       $links[] = l(t('Create redirection'), 'admin/config/search/redirect/add', array('query' => array('source' => $link->internal, drupal_get_destination())));
+     }
+ 
++    // Other modules can append their links or update current.
++    drupal_alter('linkchecker_report_page_links', $links, $link);
++
+     // Create table data for output.
+     $rows[] = array(
+       'data' => array(

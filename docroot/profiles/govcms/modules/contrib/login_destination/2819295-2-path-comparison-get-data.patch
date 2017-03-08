@@ -1,0 +1,13 @@
+diff --git a/login_destination.module b/login_destination.module
+index 8757ea3..03782dd 100644
+--- a/login_destination.module
++++ b/login_destination.module
+@@ -437,7 +437,7 @@ function _login_destination_get_current($trigger = '') {
+   }
+ 
+   if ($trigger == 'login') {
+-    return $_GET['q'];
++    return request_uri();
+   }
+ 
+   // Front by default.
