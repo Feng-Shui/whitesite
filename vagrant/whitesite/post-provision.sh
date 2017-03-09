@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Create symlink to make Drupal easier to find
-ln -s /var/www/uikit.local /home/vagrant/uikit.local
+ln -s /var/www/whitesite.local /home/vagrant/whitesite.local
 
 # Install yarn
 #curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
