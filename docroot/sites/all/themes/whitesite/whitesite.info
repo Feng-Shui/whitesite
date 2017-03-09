@@ -1,6 +1,6 @@
 screenshot  = screenshot.png
-name        = UI KIT
-description = Based on DTA's UI Kit (version 1) and Design Guide. Can be used as is or sub-themed.
+name        = Whitesite
+description = Based on DTA's UI Kit (version 2) and Design Guide. Can be used as is or sub-themed.
 core        = 7.x
 
 ; Remove some styling that we don't want
@@ -11,7 +11,7 @@ stylesheets[all][] = toc_filter.css
 stylesheets[all][] = workbench.block.css
 
 ; Add UI Kit and theme styles and JS
-stylesheets[all][] = uikit-assets/pancake.min.css
+stylesheets[all][] = uikit/pancake/css/pancake.min.css
 ; scripts[] = js/ui-kit.min.js
 
 ; Add scripts
