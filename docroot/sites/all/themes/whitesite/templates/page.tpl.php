@@ -6,113 +6,116 @@
  * Complete documentation for this file is available online.
  * @see https://drupal.org/node/1728148
  */
-
-// Render region if there's content in theme.
-$navigation    = render($page['navigation']);
-$hero          = render($page['hero']);
-$sidebar_left  = render($page['sidebar_left']);
-$sidebar_right = render($page['sidebar_right']);
-
-$main_classes = '';
-if ($sidebar_left && $sidebar_right) {
-  $main_classes .= ' page--sidebar-left-right';
-}
-elseif ($sidebar_left) {
-  $main_classes .= ' page--sidebar-left';
-}
-elseif ($sidebar_right) {
-  $main_classes .= ' page--sidebar-right';
-}
-
 ?>
 
-<header class="header" id="header" role="banner">
-  <section class="page-header">
-    <div class="wrapper">
-
-      <div class="page-header__branding">
-        <?php print render($page['header']); ?>
-      </div>
-
-      <?php if ($navigation): ?>
-        <div class="site-nav">
-          <nav class="site-nav__wrapper">
-            <?php print $navigation; ?>
-          </nav>
-        </div>
-      <?php endif; ?>
-
+<header role="banner" class="uikit-header">
+  <div class="container">
+    <div class="row">
+      <?php print render($page['header']); ?>
     </div>
-  </section>
+    <div class="row">
+      <?php print render($page['navigation']); ?>
+    </div>
+  </div>
 </header>
 
-<?php if ($hero): ?>
-  <section class="hero">
-    <div class="wrapper">
-      <?php print $hero; ?>
-    </div>
-  </section>
+<?php if ($page['hero']): ?>
+<section id="hero" class="container">
+<?php print render($page['hero']); ?>
+</section>
 <?php endif; ?>
 
+<section id="breadcrumbs" class="container">
 <?php print $breadcrumb; ?>
+</section>
 
-<main id="page" role="main" class="<?php print $main_classes; ?>">
+<main role="main" class="container">
 
-  <?php if ($sidebar_left): ?>
-  <aside class="sidebar__left" role="complementary">
-    <?php print $sidebar_left; ?>
-  </aside>
+  <?php if (!empty($page['content_above'])): ?>
+  <div class="row">
+    <section id="content-above">
+      <?php print render($page['content_above']); ?>
+    </section>
+  </div>
   <?php endif; ?>
+  
+  <div class="row">
+  
+    <?php if (!empty($page['sidebar_left'])): ?>
+    <aside class="<?php print $layout_classes['sidebar_left']; ?>" role="complementary">
+      <?php print render($page['sidebar_left']); ?>
+    </aside>
+    <?php endif; ?>
 
-  <article id="content" class="content-main">
+    <article id="content" class="<?php print $layout_classes['content']; ?>">
 
-    <div id="main">
+      <a href="#skip-link" id="skip-content" class="element-invisible">Go to top of page</a>
 
-      <div id="content" class="column">
+      <a id="main-content"></a>
 
-        <a href="#skip-link" id="skip-content" class="element-invisible">Go to top of page</a>
+      <?php print render($title_prefix); ?>
+      <?php if ($title): ?>
+      <h1 class="uikit-display-1"><?php print $title; ?></h1>
+      <?php endif; ?>
+      <?php print render($title_suffix); ?>
 
-        <a id="main-content"></a>
+      <?php print $messages; ?>
+      <?php print render($tabs); ?>
+      <?php print render($page['help']); ?>
+      <?php if ($action_links): ?>
+      <ul class="action-links"><?php print render($action_links); ?></ul>
+      <?php endif; ?>
 
-        <?php print render($title_prefix); ?>
-        <?php if ($title): ?>
-        <h1 class="page__title title" id="page-title"><?php print $title; ?></h1>
-        <?php endif; ?>
-        <?php print render($title_suffix); ?>
+      <?php print render($page['content']); ?>
 
-        <?php print $messages; ?>
-        <?php print render($tabs); ?>
-        <?php print render($page['help']); ?>
-        <?php if ($action_links): ?>
-        <ul class="action-links"><?php print render($action_links); ?></ul>
-        <?php endif; ?>
+      <?php print $feed_icons; ?>
 
-        <?php print render($page['content']); ?>
+    </article>
 
-        <?php print $feed_icons; ?>
+    <?php if (!empty($page['sidebar_right'])): ?>
+    <aside class="<?php print $layout_classes['sidebar_right']; ?>" role="complementary">
+      <?php print render($page['sidebar_right']); ?>
+    </aside>
+    <?php endif; ?>
 
-      </div>
-    </div>
-  </article>
+  </div>
 
-  <?php if ($sidebar_right): ?>
-  <aside class="sidebar__right" role="complementary">
-    <?php print $sidebar_right; ?>
-  </aside>
+  <?php if (!empty($page['content_below'])): ?>
+  <div class="row">
+    <section id="content-below">
+      <?php print render($page['content_below']); ?>
+    </section>
+  </div>
   <?php endif; ?>
 
 </main>
 
 <footer role="contentinfo">
-  <div class="wrapper">
-    <section class="footer-top">
-      <?php print render($page['footer_top']); ?>
-    </section>
-    <section class="footer-bottom">
-      <?php print render($page['footer_bottom']); ?>
-    </section>
-    <section class="page-bottom">
-      <?php print render($page['bottom']); ?>
-    </section>
+  <div class="container">
+
+    <?php if (!empty($page['footer_top'])): ?>
+    <div class="row">
+      <section id="footer-top">
+        <?php print render($page['footer_top']); ?>
+      </section>
+    </div>
+    <?php endif; ?>
+
+    <?php if (!empty($page['footer_bottom'])): ?>
+    <div class="row">
+      <section id="footer-bottom">
+        <?php print render($page['footer_bottom']); ?>
+      </section>
+    </div>
+    <?php endif; ?>
+
+    <?php if (!empty($page['bottom'])): ?>
+    <div class="row">
+      <section id="bottom">
+        <?php print render($page['bottom']); ?>
+      </section>
+    </div>
+    <?php endif; ?>
+
   </div>
 </footer>

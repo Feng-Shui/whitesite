@@ -35,19 +35,24 @@ function whitesite_form_alter(&$form, &$form_state, $form_id) {
  * Implements THEME_preprocess_html().
  */
 function whitesite_preprocess_html(&$variables) {
-  drupal_add_css('https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700&subset=latin-ext', array('type' => 'external'));
 
   // Add full width rules
-  _whitesite_full_width_styling($variables);
+  // @todo
+  // _whitesite_full_width_styling($variables);
+
+  // Add some body classes to get the body styling and grid
+  $variables['classes_array'][] = 'uikit-body';
+  $variables['classes_array'][] = 'uikit-grid';
+
 }
 
 /**
  * Implements THEME_preprocess_field().
  */
 function whitesite_preprocess_field(&$variables) {
-  if ($variables['element']['#field_name'] == 'field_tags') {
-    $variables['classes_array'][] = 'tags';
-  }
+//  if ($variables['element']['#field_name'] == 'field_tags') {
+//    $variables['classes_array'][] = 'tags';
+//  }
 }
 
 /**
@@ -68,6 +73,47 @@ function whitesite_preprocess_node(&$variables) {
  */
 function whitesite_preprocess_page(&$variables) {
   $variables['page']['header'] = _whitesite_preprocess_region_header($variables['page']['header']);
+
+  // Determine the bootstrap classes to use for the main content area and the
+  // left and right sidebars
+  $has_left_sidebar  = !empty($variables['page']['sidebar_left']);
+  $has_right_sidebar = !empty($variables['page']['sidebar_right']);
+
+  switch (TRUE) {
+    case ($has_left_sidebar && $has_right_sidebar):
+      $variables['layout_classes'] = array(
+        'sidebar_left'  => 'col-md-3',
+        'content'       => 'col-md-6',
+        'sidebar_right' => 'col-md-3',
+      );
+      break;
+
+    case ($has_left_sidebar && !$has_right_sidebar):
+      $variables['layout_classes'] = array(
+        'sidebar_left'  => 'col-md-3',
+        'content'       => 'col-md-9',
+        'sidebar_right' => '',
+      );
+      break;
+
+    case (!$has_left_sidebar && $has_right_sidebar):
+      $variables['layout_classes'] = array(
+        'sidebar_left'  => '',
+        'content'       => 'col-md-9',
+        'sidebar_right' => 'col-md-3',
+      );
+      break;
+
+    default:
+      $variables['layout_classes'] = array(
+        'sidebar_left'  => '',
+        'content'       => 'col-md-12',
+        'sidebar_right' => '',
+
+      );
+      break;
+  }
+
 }
 
 /**
@@ -131,14 +177,15 @@ function whitesite_breadcrumb($variables) {
     $output = '<h2 class="element-invisible">' . t('You are here') . '</h2>';
 
     // Process breadcrumb for UI KIT format.
-    $breadcrumb_list = '<ul>';
+    $breadcrumb_list = '<ul class="uikit-link-list uikit-link-list--inline">';
+
     foreach ($breadcrumb as $link) {
       $breadcrumb_list .= '<li>' . $link . '</li>';
     }
     $breadcrumb_list .= '</ul>';
 
     // Add UI KIT tag and style to breadcrumb.
-    $output .= '<nav class="breadcrumbs" aria-label="breadcrumb"><div class="wrapper">' . $breadcrumb_list . '</div></nav>';
+    $output .= '<nav aria-label="breadcrumb" role="navigation" class="uikit-breadcrumbs">' . $breadcrumb_list . '</nav>';
     return $output;
   }
 }
@@ -322,21 +369,21 @@ function whitesite_status_messages($variables) {
   $output = '';
 
   $status_heading = array(
-    'status' => t('Status message'),
-    'error' => t('Error message'),
+    'status'  => t('Status message'),
+    'error'   => t('Error message'),
     'warning' => t('Warning message'),
   );
 
   // Map the UI Kit classes to drupal
   $ui_kit_statuses = array(
-    'status' => 'callout--success',
-    'error' => 'callout--error',
-    'warning' => 'callout--warning',
+    'status'  => 'uikit-page-alerts--success',
+    'error'   => 'uikit-page-alerts--error',
+    'warning' => 'uikit-page-alerts--warning',
   );
 
   foreach (drupal_get_messages($display) as $type => $messages) {
     // Add UI KIT index-link class to the message div.
-    $output .= "<div class=\"messages $ui_kit_statuses[$type]\">\n";
+    $output .= "<div class=\"uikit-page-alerts $ui_kit_statuses[$type]\">\n";
     if (!empty($status_heading[$type])) {
       $output .= '<h2 class="element-invisible">' . $status_heading[$type] . "</h2>\n";
     }
@@ -603,43 +650,21 @@ function _whitesite_preprocess_region_header($header_content = '') {
   $site_name   = variable_get('site_name', '');
   $site_slogan = variable_get('site_slogan', '');
   $output      = '';
+  $link_text   = '';
 
   // Do we want to show a logo?
   if (theme_get_setting('toggle_logo')) {
 
-    $logo = theme_get_setting('logo');
-
-    // Attempt to get the width and height of the logo.
-    $max_width = theme_get_setting('logo_max_width');
-    list($width, $height) = getimagesize($logo);
-
-    // If we're dealing with an SVG, the width and height will be null, so we set
-    // a height and get the browser to pick up the width.
-    if (is_null($width) && is_null($height)) {
-      $width = $max_width;
-    }
-
-    // Bitmap images will give us values.
-    elseif ($width > $max_width) {
-      $ratio  = $height / $width;
-      $width  = $max_width;
-      $height = round($width * $ratio);
-    }
+    // Get the logo
+    $logo_path = theme_get_setting('logo');
 
     // Create the image using theme_image().
-    $logo = theme('image', array(
-      'path'   => $logo,
+    $link_text .= theme('image', array(
+      'path'   => $logo_path,
       'alt'    => t('@site_name logo', array('@site_name' => $site_name)),
       'title'  => filter_xss($site_name),
-      'width'  => $width,
-      'height' => $height,
+      'attributes' => array('class' => array('uikit-header__logo__mark', 'uikit-responsive-img')),
     ));
-
-    // Inline styling to prevent SVG container from collapsing and making the
-    // logo smaller or distorting it.
-    $output .= '<div class="page-header__logo">';
-    $output .= l($logo, '<front>', array('html' => TRUE));
-    $output .= '</div>';
 
   }
 
@@ -647,27 +672,33 @@ function _whitesite_preprocess_region_header($header_content = '') {
   $show_site_name   = theme_get_setting('toggle_name');
   $show_site_slogan = theme_get_setting('toggle_slogan');
 
-  $output .= '<div class="page-header__site-info">';
-
-  // Do we want to show a site name?
   if ($show_site_name) {
-    $output .= '<div class="page-header__site-title">' . l($site_name, '<front>') . '</div>';
-  }
-  // Do we want to show a site slogan?
-  if (!empty($site_slogan) && $show_site_slogan) {
-    $output .= '<div class="page-header__site_slogan">' . filter_xss($site_slogan) . '</div>';
+
+    $link_text .= '<span class="uikit-header__logo__type uikit-display-4">';
+
+    $link_text .= $site_name;
+
+    // Do we want to show a site slogan too?
+    if (!empty($site_slogan) && $show_site_slogan) {
+      $link_text .= '<br />' . filter_xss($site_slogan);
+    }
+
+    $link_text .= '</span>';
+
   }
 
-  $output .= '</div>';
+  // Add the header home link
+  $output .= l($link_text, '<front>', array('html' => TRUE, 'attributes' => array('class' => array('uikit-header__logo'))));
 
-  $output .= '<div class="page-header__content">';
-  if (is_array($header_content)) {
-    $output .= drupal_render($header_content);
-  }
-  else {
-    $output .= $header_content;
-  }
-  $output .= '</div>';
+  // @todo deal with header content
+//  $output .= '<div class="page-header__content">';
+//  if (is_array($header_content)) {
+//    $output .= drupal_render($header_content);
+//  }
+//  else {
+//    $output .= $header_content;
+//  }
+//  $output .= '</div>';
 
   return $output;
 }
