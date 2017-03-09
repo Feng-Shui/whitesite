@@ -7,8 +7,8 @@ vagrant_synced_folder_default_type: nfs
 
 # If you need to run multiple instances of Drupal VM, set a unique hostname,
 # machine name, and IP address for each instance.
-vagrant_hostname: uikit.local
-vagrant_machine_name: uikit.local
+vagrant_hostname: whitesite.local
+vagrant_machine_name: whitesite.local
 vagrant_ip: 192.168.33.33
 
 # Allow Drupal VM to be accessed via a public network interface on your host.
@@ -24,7 +24,7 @@ vagrant_synced_folders:
   # any of the build_* settings are 'true'. By default the folder is set to
   # the drupal-vm folder.
   - local_path: ../
-    destination: /var/www/uikit.local
+    destination: /var/www/whitesite.local
     type: nfs
     create: true
 
@@ -55,7 +55,7 @@ drush_make_options: "--no-gitinfofile"
 # composer based site deployment strategy.
 build_composer: false
 drupal_composer_path: "{{ config_dir }}/drupal.composer.json"
-drupal_composer_install_dir: "/var/www/uikit.local"
+drupal_composer_install_dir: "/var/www/whitesite.local"
 drupal_composer_dependencies:
   - "drupal/devel:1.x-dev"
 
@@ -295,7 +295,7 @@ composer_global_packages:
 pre_provision_scripts: []
 post_provision_scripts:
   # - "../examples/scripts/configure-solr.sh"
-  - ../uikit/post-provision.sh
+  - ../whitesite/post-provision.sh
 
 # MySQL Configuration.
 mysql_root_password: root
