@@ -56,7 +56,7 @@ http://whitesite.local/install.php
 ## Basic Drupal configuration
 
 ```bash
-drush en -y whitesite devel
+drush en -y whitesite devel admin_menu
 drush dis -y navbar
 drush vset theme_default whitesite
 ```
