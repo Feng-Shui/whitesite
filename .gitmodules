@@ -1,3 +1,3 @@
-[submodule "docroot/sites/all/themes/govcms_parks"]
-	path = docroot/sites/all/themes/govcms_parks
+[submodule "docroot/sites/all/themes/govcms_parkes"]
+	path = docroot/sites/all/themes/govcms_parkes
 	url = git@github.com:govCMS/parkes.git
