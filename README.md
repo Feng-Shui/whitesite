@@ -1,4 +1,4 @@
-# Temp dev env for Whitesite
+# Temp dev env for govCMS Parks development
 
 ## Install Ansible, VirtualBox and Vagrant
 
@@ -44,7 +44,7 @@ sudo apt-get update && sudo apt-get install yarn
 ## Install UI Kit stuff
 
 ```bash
-cd whitesite.local/docroot/sites/all/themes/whitesite/uikit
+cd whitesite.local/docroot/sites/all/themes/govcms_parks/uikit
 npm install
 yarn
 npm run bootstrap
@@ -56,9 +56,9 @@ http://whitesite.local/install.php
 ## Basic Drupal configuration
 
 ```bash
-drush en -y whitesite devel admin_menu
+drush en -y govcms_parks devel admin_menu
 drush dis -y navbar
-drush vset theme_default whitesite
+drush vset theme_default govcms_parks
 ```
 
 ## I ran into issues at that point, I had to
