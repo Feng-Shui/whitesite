@@ -44,7 +44,7 @@ sudo apt-get update && sudo apt-get install yarn
 ## Install UI Kit stuff
 
 ```bash
-cd whitesite.local/docroot/sites/all/themes/govcms_parks/uikit
+cd whitesite.local/docroot/sites/all/themes/govcms_parkes/uikit
 npm install
 yarn
 npm run bootstrap
@@ -56,9 +56,9 @@ http://whitesite.local/install.php
 ## Basic Drupal configuration
 
 ```bash
-drush en -y govcms_parks devel admin_menu
+drush en -y govcms_parkes devel admin_menu
 drush dis -y navbar
-drush vset theme_default govcms_parks
+drush vset theme_default govcms_parkes
 ```
 
 ## I ran into issues at that point, I had to
