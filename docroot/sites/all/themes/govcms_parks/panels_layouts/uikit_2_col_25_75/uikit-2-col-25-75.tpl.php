@@ -6,4 +6,4 @@
  *
  * See this layout's include file for details of the structure.
  */
-echo _govcms_parks_render_panel_layout($variables);
+echo _govcms_parkes_render_panel_layout($variables);

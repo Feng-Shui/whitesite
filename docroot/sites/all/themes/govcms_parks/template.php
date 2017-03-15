@@ -14,7 +14,7 @@
 /**
  * Implements THEME_form_alter().
  */
-function govcms_parks_form_alter(&$form, &$form_state, $form_id) {
+function govcms_parkes_form_alter(&$form, &$form_state, $form_id) {
 
   // If this form is a search api form, we want to remove the size attribute
   // on the text input, it makes styling difficult. We also update the
@@ -34,11 +34,11 @@ function govcms_parks_form_alter(&$form, &$form_state, $form_id) {
 /**
  * Implements THEME_preprocess_html().
  */
-function govcms_parks_preprocess_html(&$variables) {
+function govcms_parkes_preprocess_html(&$variables) {
 
   // Add full width rules
   // @todo
-  // _govcms_parks_full_width_styling($variables);
+  // _govcms_parkes_full_width_styling($variables);
 
   // Add some body classes to get the body styling and grid
   $variables['classes_array'][] = 'uikit-body';
@@ -49,7 +49,7 @@ function govcms_parks_preprocess_html(&$variables) {
 /**
  * Implements THEME_preprocess_field().
  */
-function govcms_parks_preprocess_field(&$variables) {
+function govcms_parkes_preprocess_field(&$variables) {
 //  if ($variables['element']['#field_name'] == 'field_tags') {
 //    $variables['classes_array'][] = 'tags';
 //  }
@@ -58,7 +58,7 @@ function govcms_parks_preprocess_field(&$variables) {
 /**
  * Implements THEME_preprocess_node().
  */
-function govcms_parks_preprocess_node(&$variables) {
+function govcms_parkes_preprocess_node(&$variables) {
   // Add UI KIT class to author and date information.
   $variables['submitted'] = '<div class="meta">' . t('Submitted by !author on <time>!date</time>', array('!date' => $variables['date'], '!author' => $variables['name']));
 
@@ -71,8 +71,8 @@ function govcms_parks_preprocess_node(&$variables) {
 /**
  * Implements THEME_preprocess_page().
  */
-function govcms_parks_preprocess_page(&$variables) {
-  $variables['page']['header'] = _govcms_parks_preprocess_region_header($variables['page']['header']);
+function govcms_parkes_preprocess_page(&$variables) {
+  $variables['page']['header'] = _govcms_parkes_preprocess_region_header($variables['page']['header']);
 
   // Determine the bootstrap classes to use for the main content area and the
   // left and right sidebars
@@ -119,14 +119,14 @@ function govcms_parks_preprocess_page(&$variables) {
 /**
  * Implements THEME_preprocess_maintenance_page().
  */
-function govcms_parks_preprocess_maintenance_page(&$variables) {
-  $variables['header'] = _govcms_parks_preprocess_region_header();
+function govcms_parkes_preprocess_maintenance_page(&$variables) {
+  $variables['header'] = _govcms_parkes_preprocess_region_header();
 }
 
 /**
  * Implements THEME_preprocess_block().
  */
-function govcms_parks_preprocess_block(&$variables) {
+function govcms_parkes_preprocess_block(&$variables) {
 
   $block = $variables['block'];
 
@@ -155,7 +155,7 @@ function govcms_parks_preprocess_block(&$variables) {
 /**
  * Implements THEME_preprocess_region().
  */
-function govcms_parks_preprocess_region(&$variables) {
+function govcms_parkes_preprocess_region(&$variables) {
   // Drop in the footer layout classes
   if (in_array($variables['region'], array('footer_top', 'footer_bottom'))) {
     $variables['classes_array'][] = 'region--' . theme_get_setting($variables['region'] . '_layout');
@@ -168,7 +168,7 @@ function govcms_parks_preprocess_region(&$variables) {
 /**
  * Implements THEME_breadcrumb().
  */
-function govcms_parks_breadcrumb($variables) {
+function govcms_parkes_breadcrumb($variables) {
   $breadcrumb = $variables['breadcrumb'];
 
   if (!empty($breadcrumb)) {
@@ -193,7 +193,7 @@ function govcms_parks_breadcrumb($variables) {
 /**
  * Implements THEME_menu_local_tasks().
  */
-function govcms_parks_menu_local_tasks($variables) {
+function govcms_parkes_menu_local_tasks($variables) {
   $output = '';
 
   // Add UI KIT class to the tabs.
@@ -213,7 +213,7 @@ function govcms_parks_menu_local_tasks($variables) {
   }
 
   // Process tabs.
-  $output = _govcms_parks_process_local_tasks($output);
+  $output = _govcms_parkes_process_local_tasks($output);
 
   return $output;
 }
@@ -221,7 +221,7 @@ function govcms_parks_menu_local_tasks($variables) {
 /**
  * Implements THEME_link().
  */
-function govcms_parks_link($variables) {
+function govcms_parkes_link($variables) {
   // Check link classes.
   if (isset($variables['options']['attributes']['class'])) {
     $classes = $variables['options']['attributes']['class'];
@@ -238,7 +238,7 @@ function govcms_parks_link($variables) {
     );
 
     // Add additional UI KIT classes.
-    $variables['options']['attributes']['class'] = _govcms_parks_active_link($class_pairs, $classes);
+    $variables['options']['attributes']['class'] = _govcms_parkes_active_link($class_pairs, $classes);
   }
 
   // Default theme_link() function.
@@ -250,7 +250,7 @@ function govcms_parks_link($variables) {
 /**
  * Implements THEME_pager().
  */
-function govcms_parks_pager($variables) {
+function govcms_parkes_pager($variables) {
   $tags = $variables['tags'];
   $element = $variables['element'];
   $parameters = $variables['parameters'];
@@ -364,7 +364,7 @@ function govcms_parks_pager($variables) {
 /**
  * Implements THEME_status_messages().
  */
-function govcms_parks_status_messages($variables) {
+function govcms_parkes_status_messages($variables) {
   $display = $variables['display'];
   $output = '';
 
@@ -405,7 +405,7 @@ function govcms_parks_status_messages($variables) {
 /**
  * Implements THEME_form_element_label().
  */
-function govcms_parks_form_element_label($variables) {
+function govcms_parkes_form_element_label($variables) {
   $element = $variables['element'];
 
   // This is also used in the installer, pre-database setup.
@@ -469,7 +469,7 @@ function govcms_parks_form_element_label($variables) {
 /**
  * Implements THEME_form_element().
  */
-function govcms_parks_form_element($variables) {
+function govcms_parkes_form_element($variables) {
   $element = &$variables['element'];
 
   /** Wrapper: Open ***********************************************************/
@@ -582,7 +582,7 @@ function govcms_parks_form_element($variables) {
 /**
  * Implements THEME_fieldset().
  */
-function govcms_parks_fieldset($variables) {
+function govcms_parkes_fieldset($variables) {
   $element = $variables['element'];
   element_set_attributes($element, array('id'));
   _form_set_class($element);
@@ -611,7 +611,7 @@ function govcms_parks_fieldset($variables) {
 /**
  * Implement THEME_toc_filter().
  */
-function govcms_parks_toc_filter($variables) {
+function govcms_parkes_toc_filter($variables) {
   $output = '';
   $output .= '<nav class="index-links">';
   $output .= '<h2 id="index-links">' . t('Contents') . '</h2>';
@@ -623,7 +623,7 @@ function govcms_parks_toc_filter($variables) {
 /**
  * Implements THEME_toc_filter_back_to_top().
  */
-function govcms_parks_toc_filter_back_to_top($variables) {
+function govcms_parkes_toc_filter_back_to_top($variables) {
   return '<span class="back-to-index-link"><a href="#index-links">' . t('Back to contents ↑') . '</a></span>';
 }
 
@@ -639,7 +639,7 @@ function govcms_parks_toc_filter_back_to_top($variables) {
  * @return mixed
  *   The processed link html.
  */
-function _govcms_parks_process_local_tasks($children) {
+function _govcms_parkes_process_local_tasks($children) {
   preg_replace('/(?:class="[^"]*?\b)(active)\b/i', 'active is-current', $children);
   return $children;
 }
@@ -663,9 +663,9 @@ function _govcms_parks_process_local_tasks($children) {
  * @return string
  *   The header region content.
  *
- * @see govcms_parks_preprocess_page().
+ * @see govcms_parkes_preprocess_page().
  */
-function _govcms_parks_preprocess_region_header($header_content = '') {
+function _govcms_parkes_preprocess_region_header($header_content = '') {
   $site_name   = variable_get('site_name', '');
   $site_slogan = variable_get('site_slogan', '');
   $output      = '';
@@ -734,7 +734,7 @@ function _govcms_parks_preprocess_region_header($header_content = '') {
  * @return array
  *   Class array.
  */
-function _govcms_parks_active_link($class_pairs, $classes) {
+function _govcms_parkes_active_link($class_pairs, $classes) {
   foreach ($class_pairs as $needle => $additional_class) {
     if (in_array($needle, $classes)) {
       $classes[] = $additional_class;
@@ -754,7 +754,7 @@ function _govcms_parks_active_link($class_pairs, $classes) {
  * @return string
  *   The panel markup
  */
-function _govcms_parks_render_panel_layout($variables) {
+function _govcms_parkes_render_panel_layout($variables) {
   $attributes = array('class' => 'layout__' . $variables['classes']);
   if (!empty($variables['css_id'])) {
     $attributes['id'] = $variables['css_id'];
@@ -762,7 +762,7 @@ function _govcms_parks_render_panel_layout($variables) {
 
   $output  = '';
   $output .= '<div' . drupal_attributes($attributes) . '>';
-  $output .= _govcms_parks_render_panel_layout_build_grid($variables['layout']['grid'], $variables['content']);
+  $output .= _govcms_parkes_render_panel_layout_build_grid($variables['layout']['grid'], $variables['content']);
   $output .= '</div>';
 
   return $output;
@@ -771,7 +771,7 @@ function _govcms_parks_render_panel_layout($variables) {
 /**
  * Builds Panel layout markup based on Bootstrap classes
  *
- * @see _govcms_parks_render_panel_layout().
+ * @see _govcms_parkes_render_panel_layout().
  *
  * @param array $grid
  *
@@ -779,7 +779,7 @@ function _govcms_parks_render_panel_layout($variables) {
  *
  * @return string
  */
-function _govcms_parks_render_panel_layout_build_grid($grid, $content) {
+function _govcms_parkes_render_panel_layout_build_grid($grid, $content) {
   $output  = '';
 
   foreach ($grid as $row => $columns) {
@@ -791,7 +791,7 @@ function _govcms_parks_render_panel_layout_build_grid($grid, $content) {
       // $data is an array of child rows/cols and grid info, $key is a delta
       if (is_array($data)) {
         $output .= '<div class="' . $data['grid'] . '">';
-        $output .= _govcms_parks_render_panel_layout_build_grid($data['children'], $content);
+        $output .= _govcms_parkes_render_panel_layout_build_grid($data['children'], $content);
         $output .= '</div>';
       }
 
@@ -836,7 +836,7 @@ function _govcms_parks_render_panel_layout_build_grid($grid, $content) {
  * @return array
  *   The Panels plugin definition
  */
-function _govcms_parks_prepare_panel_layout_array($human_name, $machine_name, $rows_cols, $category = null) {
+function _govcms_parkes_prepare_panel_layout_array($human_name, $machine_name, $rows_cols, $category = null) {
   if (empty($category)) {
     $category = t('UI Kit');
   }
@@ -850,7 +850,7 @@ function _govcms_parks_prepare_panel_layout_array($human_name, $machine_name, $r
     'bootstrap' => array(),
   );
 
-  $data = _govcms_parks_prepare_panel_layout_array_extract_layout($rows_cols);
+  $data = _govcms_parkes_prepare_panel_layout_array_extract_layout($rows_cols);
 
   $plugin = array_merge($plugin, $data);
 
@@ -861,7 +861,7 @@ function _govcms_parks_prepare_panel_layout_array($human_name, $machine_name, $r
  * Extracts the region and grid configuration from a nested Panels layout
  * declaration.
  *
- * @see _govcms_parks_prepare_panel_layout_array().
+ * @see _govcms_parkes_prepare_panel_layout_array().
  *
  * @param array $rows_cols
  *   An nested array of row and column data
@@ -869,7 +869,7 @@ function _govcms_parks_prepare_panel_layout_array($human_name, $machine_name, $r
  * @return array
  *   An array with two keys 'regions' and 'grid'.
  */
-function _govcms_parks_prepare_panel_layout_array_extract_layout($rows_cols) {
+function _govcms_parkes_prepare_panel_layout_array_extract_layout($rows_cols) {
 
   $retval = array(
     'regions' => array(),
@@ -894,7 +894,7 @@ function _govcms_parks_prepare_panel_layout_array_extract_layout($rows_cols) {
 
       // if data contains children, there is a sub-grid
       if (!empty($data['children'])) {
-        $returned = _govcms_parks_prepare_panel_layout_array_extract_layout($data['children']);
+        $returned = _govcms_parkes_prepare_panel_layout_array_extract_layout($data['children']);
         $retval['grid'][$delta][$key] = array(
           'grid'     => $retval['grid'][$delta][$key],
           'children' => array($returned['grid'][$delta]),
@@ -912,9 +912,9 @@ function _govcms_parks_prepare_panel_layout_array_extract_layout($rows_cols) {
  *
  * @param array $variables
  *
- * @see govcms_parks_preprocess_html().
+ * @see govcms_parkes_preprocess_html().
  */
-function _govcms_parks_full_width_styling(&$variables) {
+function _govcms_parkes_full_width_styling(&$variables) {
   $paths = trim(theme_get_setting('full_width_pages'));
   if (
     drupal_match_path(current_path(), $paths)

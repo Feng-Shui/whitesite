@@ -5,7 +5,7 @@
 
 (function ($, Drupal, window, document, undefined) {
 
-  Drupal.behaviors.govcmsParksHeaderSearch = {
+  Drupal.behaviors.govcmsParkesHeaderSearch = {
 
     attach: function(context, settings) {
 
@@ -15,7 +15,7 @@
       // Update the form on load and window resize.
       this.updateSearchForm();
       $(window).resize(function () {
-        Drupal.behaviors.govcmsParksHeaderSearch.updateSearchForm();
+        Drupal.behaviors.govcmsParkesHeaderSearch.updateSearchForm();
       });
 
     },
@@ -29,7 +29,7 @@
     updateSearchForm: function () {
       var button_label = '';
 
-      if (Drupal.settings.govcmsParks.breakpoint == 'desktop') {
+      if (Drupal.settings.govcmsParkes.breakpoint == 'desktop') {
         button_label  = this.originalSearchButtonValue;
       }
 

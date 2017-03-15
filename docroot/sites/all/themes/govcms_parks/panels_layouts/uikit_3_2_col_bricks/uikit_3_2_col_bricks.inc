@@ -44,8 +44,8 @@ $rows_cols = array(
 // All Panels layouts are prepared and rendered by helper functions in
 // template.php. We include template.php file manually if the functions are not
 // defined as the panel preview can be rendered in the admin theme.
-if (!function_exists('_govcms_parks_render_panel_layout')) {
-  include_once(DRUPAL_ROOT . '/' . drupal_get_path('theme', 'govcms_parks') . '/template.php');
+if (!function_exists('_govcms_parkes_render_panel_layout')) {
+  include_once(DRUPAL_ROOT . '/' . drupal_get_path('theme', 'govcms_parkes') . '/template.php');
 }
 
-$plugin = _govcms_parks_prepare_panel_layout_array($human_name, $machine_name, $rows_cols);
+$plugin = _govcms_parkes_prepare_panel_layout_array($human_name, $machine_name, $rows_cols);

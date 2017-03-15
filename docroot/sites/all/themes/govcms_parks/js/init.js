@@ -5,9 +5,9 @@
 
 (function ($, Drupal, window, document, undefined) {
 
-  Drupal.behaviors.govcmsParks = {
+  Drupal.behaviors.govcmsParkes = {
     attach: function(context, settings) {
-      settings.govcmsParks = {};
+      settings.govcmsParkes = {};
     }
 
   };

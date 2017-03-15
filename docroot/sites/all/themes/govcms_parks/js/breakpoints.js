@@ -10,14 +10,14 @@
 
 (function ($, Drupal, window, document, undefined) {
 
-  Drupal.behaviors.govcmsParksBreakpoints = {
+  Drupal.behaviors.govcmsParkesBreakpoints = {
 
     attach: function(context, settings) {
 
       this.refreshValue();
 
       $(window).resize(function () {
-        Drupal.behaviors.govcmsParksBreakpoints.refreshValue();
+        Drupal.behaviors.govcmsParkesBreakpoints.refreshValue();
       });
 
     },
@@ -28,7 +28,7 @@
      * Additionally triggers the function to update the body class.
      */
     refreshValue: function () {
-      Drupal.settings.govcmsParks.breakpoint = window.getComputedStyle(document.querySelector('body'), ':before').getPropertyValue('content').replace(/\"/g, '');
+      Drupal.settings.govcmsParkes.breakpoint = window.getComputedStyle(document.querySelector('body'), ':before').getPropertyValue('content').replace(/\"/g, '');
       this.refreshClass();
     },
 
@@ -38,7 +38,7 @@
     refreshClass: function () {
       $('body').removeClass(function (index, className) {
         return (className.match (/(^|\s)breakpoint-\S+/g) || []).join(' ');
-      }).addClass('breakpoint-' + Drupal.settings.govcmsParks.breakpoint);
+      }).addClass('breakpoint-' + Drupal.settings.govcmsParkes.breakpoint);
     }
 
   };

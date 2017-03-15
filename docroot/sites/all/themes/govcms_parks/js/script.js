@@ -14,7 +14,7 @@
 
 
 // To understand behaviors, see https://drupal.org/node/756722#behaviors
-Drupal.behaviors.govcmsParksMyCustomBehavior = {
+Drupal.behaviors.govcmsParkesMyCustomBehavior = {
   attach: function(context, settings) {
 
     // Place your code here.
