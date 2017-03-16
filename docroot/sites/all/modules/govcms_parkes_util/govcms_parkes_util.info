@@ -1,0 +1,4 @@
+name = govCMS Parkes Utilities
+description = Provides module related code to support govCMS Parkes theme.
+package = govCMS
+core = 7.x

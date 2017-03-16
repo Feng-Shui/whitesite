@@ -1,0 +1,111 @@
+<?php
+
+/**
+ * Implements hook_theme().
+ */
+function govcms_parkes_util_theme($existing, $type, $theme, $path) {
+  return array(
+    'govcms_parkes_util_formatter_uikit_tags' => array(
+      'variables' => array('items' => array()),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function govcms_parkes_util_field_formatter_info() {
+  return array(
+    'govcms_parkes_util_uikit_tags' => array(
+      'label'           => t('UI Kit tags'),
+      'field types'     => array('taxonomy_term_reference'),
+      'multiple values' => FIELD_BEHAVIOR_DEFAULT,
+      'settings'        => array(
+        'link'            => 1,
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ *
+ * If additional formatters are added, they should get split out entirely to
+ * keep this hook tidy.
+ */
+function govcms_parkes_util_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  if ($display['type'] == 'govcms_parkes_util_uikit_tags') {
+    // Get the term IDs
+    $tids = array();
+    array_walk($items, function($item) use (&$tids) {
+      $tids[] = $item['tid'];
+    });
+
+    // Load all of the terms
+    $terms = taxonomy_term_load_multiple($tids);
+
+    // Generate the content that will appear int he list.
+    array_walk($terms, function(&$term) use ($display) {
+      $term->data = ($display['settings']['link']) ? l($term->name, 'taxonomy/term/' . $term->tid) : $term->name;
+    });
+
+    // Ideally, at this point we'd render each term using a tag view mode. But
+    // to ship that we'd start to get in to Features territory which we're
+    // avoiding for now.  We'll hand off to a local theme function.
+    return theme('govcms_parkes_util_formatter_uikit_tags', array('terms' => $terms));
+  }
+  return array();
+}
+
+/**
+ * Implements hook_field_formatter_settings_form().
+ */
+function govcms_parkes_util_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+  $element = array();
+
+  if ($display['type'] == 'govcms_parkes_util_uikit_tags') {
+    $element['link'] = array(
+      '#type'          => 'checkbox',
+      '#title'         => t('Render tags as links'),
+      '#description'   => t('Should the tags link through to their taxonomy term page.'),
+      '#default_value' => $settings['link'],
+    );
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_field_formatter_settings_summary().
+ */
+function govcms_parkes_util_field_formatter_settings_summary($field, $instance, $view_mode) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+
+  $summary = t('Plain text tag.');
+  if ($settings['link']) {
+    $summary = t('Tag linked to taxonomy term.');
+  }
+
+  return $summary;
+}
+
+/**
+ * Theme function for govcms_parkes_util_uikit_tags formatter.
+ */
+function theme_govcms_parkes_util_formatter_uikit_tags($variables) {
+  $items = array();
+  foreach ($variables['terms'] as $term) {
+    $items[] = array(
+      'data'  => $term->data,
+      'class' => array('uikit-tags__item'),
+    );
+  }
+  return array(
+    '#theme'      => 'item_list',
+    '#items'      => $items,
+    '#attributes' => array('class' => array('uikit-tags'))
+  );
+}
